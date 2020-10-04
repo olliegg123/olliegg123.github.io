@@ -69,18 +69,62 @@ var imagesArray = [
 
 var usedImages = {};
 var usedImagesCount = 0;
+var currentCount = 0;
 
 function displayImage(){
 
     var num = Math.floor(Math.random() * (imagesArray.length));
     if (!usedImages[num]){
-        document.getElementById("imageid").src= imagesArray[num];
+        document.getElementById("imageidfront").src= imagesArray[num];
         usedImages[num] = true;
         usedImagesCount++;
         if (usedImagesCount === imagesArray.length){
-            document.getElementById("imageid").src= 'images/finish.jpg';
+            document.getElementById("imageidfront").src= 'images/finish.jpg';
         }
     } else {
         displayImage();
     }
+}
+
+function displayImageBack(){
+
+    var num = Math.floor(Math.random() * (imagesArray.length));
+    if (!usedImages[num]){
+        document.getElementById("imageidback").src= imagesArray[num];
+        usedImages[num] = true;
+        usedImagesCount++;
+        if (usedImagesCount === imagesArray.length){
+            document.getElementById("imageidback").src= 'images/finish.jpg';
+        }
+    } else {
+        displayImage();
+    }
+}
+
+function flip(){
+	var element = event.currentTarget;
+	if (element.className === "card") {
+    if(element.style.transform == "rotateY(180deg)") {
+      element.style.transform = "rotateY(0deg)";
+    }
+    else {
+      element.style.transform = "rotateY(180deg)";
+    }
+  }
+};
+
+function nextFlip(){
+    if (currentCount === 0){
+        displayImageBack();
+        currentCount = 1;
+        flip();
+        return;
+    }
+    if (currentCount === 1){
+        displayImage();
+        currentCount = 0;
+        flip();
+        return;
+    }
+    
 }

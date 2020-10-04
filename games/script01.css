@@ -5,3 +5,37 @@ p {
 .button3 {
     color: red;
 }
+
+
+div {
+  width: 500px;
+  height: 500px;
+}
+
+.container {
+  margin: 20px;
+  perspective: 1000px;
+}
+
+.card {
+  transition: transform 2s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.front, .back {
+  position: absolute;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+
+

@@ -5,9 +5,19 @@
 <html>
 <head>
      <title>Liver Let Die</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
      <script src="script11.js"></script>
 </head>
 <body>
-<p><button onclick="displayImage()" id="button3" style="display: inline-block;padding: 0.3em 1.2em;margin: 0 0.3em 0.3em 0;border-radius: 2em;box-sizing: border-box;text-decoration: none;font-family: 'Roboto',sans-serif;font-weight: 300;color: #FFFFFF;background-color: #4eb5f1;text-align: center;transition: all 0.2s;margin-left:150px;font-size: 20px">Next Card</button></p>
-<img id="imageid" src="images/back.png" width="440px" style="border: solid;margin-left: 7px;"></body>
+<div class="container">
+  <div class="card" onclick="nextFlip()">
+    <div class="front">
+      <img id="imageidfront" src="images/back.png" width="440px" style="border: solid;">
+    </div>
+    <div class="back">
+      <img id="imageidback" src="images/back.png" width="440px" style="border: solid;">
+    </div>
+  </div>
+</div>
+</body>
 </html>

@@ -1,0 +1,74 @@
+<head>
+<style>
+.container {
+  width: 200px;
+  height: 260px;
+  position: relative;
+  perspective: 800px;
+  -webkit-perspective: 800px;
+  -o-perspective: 800px;
+  -moz-perspective: 800px;
+}
+#card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 1s;
+  -o-transform-style: preserve-3d;
+  -o-transition: -o-transform 1s;
+  -moz-transform-style: preserve-3d;
+  -moz-transition: -moz-transform 1s;
+}
+#card figure {
+  margin: 0;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+}
+#card .front {
+  background: red;
+  font-size: 36px;
+}
+#card .back {
+  font-size: 36px;
+  background: blue;
+  transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+}
+#card.flipped {
+  transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+}
+    </style></head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<section class="container">
+  <div id="card">
+    <figure class="front">1</figure>
+    <figure class="back">2</figure>
+  </div>
+</section>
+
+<button class="btn"><span>Flip card</span>
+</button>
+<script>
+
+you forgot to add prefix in webkit and other browsers
+
+-webkit-transition: -webkit-transform 1s;
+
+$(".btn").click(function() {
+  $("#card").toggleClass("flipped");
+});</script>
+</button>

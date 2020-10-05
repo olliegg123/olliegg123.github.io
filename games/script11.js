@@ -117,12 +117,14 @@ function nextFlip(){
     if (currentCount === 0){
         displayImageBack();
         currentCount = 1;
+        document.getElementById("imageidfront").src= 'images/back.png';
         flip();
         return;
     }
     if (currentCount === 1){
         displayImage();
         currentCount = 0;
+        document.getElementById("imageidback").src= 'images/back.png';
         flip();
         return;
     }

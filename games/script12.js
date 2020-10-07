@@ -1,48 +1,55 @@
-var cardList = [
-    'images/1.png',
-    'images/2.png',
-    'images/3.png',
-    'images/4.png',
-    'images/5.png',
-    'images/6.png',
-    'images/7.png',
-    'images/8.png',
-    'images/9.png',
-    'images/10.png',
-    'images/11.png',
-    'images/12.png',
-    'images/13.png',
-    'images/14.png',
-    'images/15.png',
-    'images/16.png',
-    'images/17.png',
-    'images/18.png',
-    'images/19.png',
-    'images/20.png',
-    'images/21.png',
-    'images/22.png',
-    'images/23.png',
-    'images/24.png',
-    'images/25.png',
-    'images/26.png',
-    'images/27.png',
-    'images/28.png',
-    'images/29.png',
-    'images/30.png',
-    'images/31.png',
-    'images/32.png',
-    'images/33.png',
-    'images/34.png',
-    'images/35.png',
-    'images/36.png',
-    'images/37.png',
-    'images/38.png',
-    'images/39.png',
-    'images/40.png',
-    'images/41.png',
-    'images/42.png',
-    'images/43.png',
-    'images/44.png',
+var highDrink = [
+  'images/1.png',
+  'images/2.png',
+  'images/3.png',
+  'images/4.png',
+  'images/5.png',
+  'images/6.png',
+  'images/7.png',
+  'images/8.png',
+  'images/9.png',
+  'images/10.png',
+  'images/11.png',
+  'images/12.png',
+  'images/13.png',
+  'images/14.png',
+  'images/15.png',
+  'images/16.png',
+  'images/17.png',
+  'images/18.png',
+  'images/19.png',
+  'images/20.png',
+  'images/21.png',
+  'images/22.png',
+];
+
+var medDrink = [
+  'images/23.png',
+  'images/24.png',
+  'images/25.png',
+  'images/26.png',
+  'images/27.png',
+  'images/28.png',
+  'images/29.png',
+  'images/30.png',
+  'images/31.png',
+  'images/32.png',
+  'images/33.png',
+  'images/34.png',
+  'images/35.png',
+  'images/36.png',
+  'images/37.png',
+  'images/38.png',
+  'images/39.png',
+  'images/40.png',
+  'images/41.png',
+  'images/42.png',
+  'images/43.png',
+  'images/44.png',
+  
+];
+
+var lowDrink = [
     'images/45.png',
     'images/46.png',
     'images/47.png',
@@ -65,7 +72,7 @@ var cardList = [
     'images/64.png',
     'images/65.png',
     'images/66.png',
-    ];
+];
   
   function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -76,11 +83,25 @@ var cardList = [
     }
 }
 
-    shuffleArray(cardList);
-    console.log(cardList);
+shuffleArray(highDrink);
+shuffleArray(medDrink);
+shuffleArray(lowDrink);
+
+const braidArrays = (...arrays) => {
+  const braided = [];
+  for (let i = 0; i < Math.max(...arrays.map(a => a.length)); i++) {
+    arrays.forEach((array) => {
+      if (array[i] !== undefined) braided.push(array[i]);
+    });
+  }
+  return braided;
+};
+
+var shuffled = braidArrays(highDrink, medDrink, lowDrink)
 
   var state = 0;
-  var totalImages = cardList.length;
+  var totalImages = shuffled.length;
+  var remaining = shuffled.length - 1;
   var counter = 0;
   var ended = false;
 
@@ -90,7 +111,7 @@ var cardList = [
     if (ended == true){
         return;
     } else {
-    document.getElementById("imageidback").src= cardList[counter];
+    document.getElementById("imageidback").src= shuffled[counter];
     counter++;
     console.log(counter)
     if (counter === totalImages){
@@ -102,6 +123,9 @@ var cardList = [
     };
   
   function flip(){
+    if (ended == true) {
+      return;
+    };
     var element = event.currentTarget;
     if (element.className === "card") {
       if(element.style.transform == "rotateY(-180deg)") {
@@ -116,6 +140,13 @@ var cardList = [
   function nextFlip(){
       if (state == 0) {
         displayImage();
+        remaining--;
+        if (remaining < 1) {
+          document.getElementById('remaining').innerHTML = 'Cards remaining: 0';
+        }
+        else {
+          document.getElementById('remaining').innerHTML = 'Cards remaining:' + remaining;
+        }
         state = 1;
         flip();
         return;
@@ -124,8 +155,14 @@ var cardList = [
       if (state == 1) {
         state = 0;
         flip();
+        if (remaining < 1) {
+          document.getElementById("imageidfront").src= 'images/finish.jpg';
+          ended = true;
+        }
         return; 
     }
   };
-
+  function remainder() {
+    document.getElementById('remaining').innerHTML = 'Cards remaining:' + remaining;
+  };
   window.onload = displayImage();

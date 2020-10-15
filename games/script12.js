@@ -1,4 +1,4 @@
-var highDrink = [
+var cards = [
   'images/1.png',
   'images/2.png',
   'images/3.png',
@@ -21,9 +21,6 @@ var highDrink = [
   'images/20.png',
   'images/21.png',
   'images/22.png',
-];
-
-var medDrink = [
   'images/23.png',
   'images/24.png',
   'images/25.png',
@@ -46,32 +43,28 @@ var medDrink = [
   'images/42.png',
   'images/43.png',
   'images/44.png',
-  
-];
-
-var lowDrink = [
-    'images/45.png',
-    'images/46.png',
-    'images/47.png',
-    'images/48.png',
-    'images/49.png',
-    'images/50.png',
-    'images/51.png',
-    'images/52.png',
-    'images/53.png',
-    'images/54.png',
-    'images/55.png',
-    'images/56.png',
-    'images/57.png',
-    'images/58.png',
-    'images/59.png',
-    'images/60.png',
-    'images/61.png',
-    'images/62.png',
-    'images/63.png',
-    'images/64.png',
-    'images/65.png',
-    'images/66.png',
+  'images/45.png',
+  'images/46.png',
+  'images/47.png',
+  'images/48.png',
+  'images/49.png',
+  'images/50.png',
+  'images/51.png',
+  'images/52.png',
+  'images/53.png',
+  'images/54.png',
+  'images/55.png',
+  'images/56.png',
+  'images/57.png',
+  'images/58.png',
+  'images/59.png',
+  'images/60.png',
+  'images/61.png',
+  'images/62.png',
+  'images/63.png',
+  'images/64.png',
+  'images/65.png',
+  'images/66.png',
 ];
   
   function shuffleArray(array) {
@@ -83,21 +76,7 @@ var lowDrink = [
     }
 }
 
-shuffleArray(highDrink);
-shuffleArray(medDrink);
-shuffleArray(lowDrink);
-
-const braidArrays = (...arrays) => {
-  const braided = [];
-  for (let i = 0; i < Math.max(...arrays.map(a => a.length)); i++) {
-    arrays.forEach((array) => {
-      if (array[i] !== undefined) braided.push(array[i]);
-    });
-  }
-  return braided;
-};
-
-var shuffled = braidArrays(highDrink, medDrink, lowDrink)
+shuffleArray(cards);
 
   var state = 0;
   var totalImages = shuffled.length;

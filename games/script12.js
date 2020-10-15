@@ -90,8 +90,8 @@ var cards = [
 shuffleArray(cards);
 
   var state = 0;
-  var totalImages = shuffled.length;
-  var remaining = shuffled.length - 1;
+  var totalImages = cards.length;
+  var remaining = cards.length - 1;
   var counter = 0;
   var ended = false;
 
@@ -101,7 +101,7 @@ shuffleArray(cards);
     if (ended == true){
         return;
     } else {
-    document.getElementById("imageidback").src= shuffled[counter];
+    document.getElementById("imageidback").src= cards[counter];
     counter++;
     console.log(counter)
     if (counter === totalImages){

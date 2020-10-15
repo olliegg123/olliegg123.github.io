@@ -59,14 +59,25 @@ var cards = [
   'images/58.png',
   'images/59.png',
   'images/60.png',
-  'images/61.png',
+  'images/61_temp.png',
   'images/62.png',
   'images/63.png',
   'images/64.png',
   'images/65.png',
   'images/66.png',
+  'images/67.png',
+  'images/68.png',
+  'images/69.png',
+  'images/70.png',
+  'images/71.png',
+  'images/72.png',
+  'images/73.png',
+  'images/74.png',
+  'images/75.png',
+  'images/76.png',
+  'images/77.png',
 ];
-  
+
   function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -85,7 +96,7 @@ shuffleArray(cards);
   var ended = false;
 
   console.log(totalImages)
-  
+
   function displayImage(){
     if (ended == true){
         return;
@@ -100,7 +111,7 @@ shuffleArray(cards);
         }
     }
     };
-  
+
   function flip(){
     if (ended == true) {
       return;
@@ -115,7 +126,7 @@ shuffleArray(cards);
       }
     }
   };
-  
+
   function nextFlip(){
       if (state == 0) {
         displayImage();
@@ -130,7 +141,7 @@ shuffleArray(cards);
         flip();
         return;
       }
-      
+
       if (state == 1) {
         state = 0;
         flip();
@@ -138,7 +149,7 @@ shuffleArray(cards);
           document.getElementById("imageidfront").src= 'images/finish.jpg';
           ended = true;
         }
-        return; 
+        return;
     }
   };
   function remainder() {

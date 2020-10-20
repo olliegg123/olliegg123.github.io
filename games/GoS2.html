@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=520px, initial-scale=0.77">
+    <meta charset="utf-8">
+    <title>Game of Speeches</title>
+    <style type="text/css">
+    text{
+        font-family: Arial, sans-serif;
+        font-size:11px;
+        pointer-events:none;
+    }
+    #chart{
+        position:absolute;
+        width:500px;
+        height:500px;
+        top:80px;
+        left:20px;
+    }
+    #chart1{
+        position:absolute;
+        width:500px;
+        height:500px;
+        top:650px;
+        left:20px;
+    }
+        #chart2{
+        position:absolute;
+        width:500px;
+        height:500px;
+        top:1200px;
+        left:20px;
+    }
+    </style>
+    
+</head>
+<body style="width: 520px; background-color: #ff6961;">
+    <button onclick="spin();spin1();spin2();" style="color: white; border-radius: 4px; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); background: rgb(28, 184, 65); margin-left: 175px; height: 40px; width: 130px; font-size: 15px;">Spin 'em all!</button>
+    <h1 style="padding-left: 200px; width:100px;"> Topic</h1>
+     
+    <div id="chart1"></div>
+    <h1 style="padding-top:503px; padding-left: 205px; width:100px;">Type</h1>
+    <div id="chart"></div>
+    <h1 style="padding-top:497px; padding-left: 190px; width:100px;">Accent</h1>
+    <div id="chart2"></div>
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        var padding = {top:20, right:40, bottom:0, left:0},
+            w = 500 - padding.left - padding.right,
+            h = 500 - padding.top  - padding.bottom,
+            r = Math.min(w, h)/2,
+            rotation = 0,
+            oldrotation = 0,
+            picked = 100000,
+            oldpick = [],
+            color = d3.scale.category20();//category20c()
+            //randomNumbers = getRandomNumbers();
+        //http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
+        var data = [
+                    {"label":"Ducks",  "value":1,  }, // padding
+                    {"label":"Bins",  "value":1,  }, //font-family
+                    {"label":"Jimmy Savile",  "value":1,  }, //bottom
+                    {"label":"Madeline Mccann",  "value":1,  }, //sans-serif
+                    {"label":"Adolf Hitler", "value":1, }, //period //pound sign
+                    {"label":"The colour grey", "value":1, }, //<h1>
+                    {"label":"Hummus", "value":1, }, //margin
+                    {"label":"Waitrose", "value":1, }, //< >
+                    {"label":"Suzanna Reid", "value":1, }, //<p>
+                    {"label":"Malnourishment", "value":1, }, //<!DOCTYPE html>
+                    {"label":"Kettle Chips", "value":1, }, //<head>
+                    {"label":"Meninism", "value":1, }, // colon
+                    {"label":"Neo Nazis", "value":1, }, // <style>
+                    {"label":"All Lives Matter", "value":1, }, // .html
+                    {"label":"Wagner and Brexit", "value":1, }, // CSS
+                    {"label":"Shooting Poor People", "value":1, }, // JavaScript
+                    {"label":"Prostitution", "value":1, }, // border
+                    {"label":"The Mile High Club", "value":1, },//semi-colon
+                    {"label":"That person over there", "value":1, }, //100%
+                    {"label":"Cars 2", "value":1},
+                    {"label":"JCBs", "value":1},
+                    {"label":"UTI", "value":1},
+                    {"label":"Orgies", "value":1},
+                    {"label":"Strong white bread flour", "value":1},
+                    {"label":"White Privilege", "value":1},
+                    {"label":"Alexander Hamilton", "value":1},
+                    {"label":"Luton Airport", "value":1},
+                    {"label":"Uzbekistan", "value":1},
+                    {"label":"The Amish", "value":1},
+                    {"label":"Veganism", "value":1},//comma //comma
+        ];
+        var svg = d3.select('#chart')
+            .append("svg")
+            .data([data])
+            .attr("width",  w + padding.left + padding.right)
+            .attr("height", h + padding.top + padding.bottom);
+        var container = svg.append("g")
+            .attr("class", "chartholder")
+            .attr("transform", "translate(" + (w/2 + padding.left) + "," + (h/2 + padding.top) + ")");
+        var vis = container
+            .append("g");
+            
+        var pie = d3.layout.pie().sort(null).value(function(d){return 1;});
+        // declare an arc generator function
+        var arc = d3.svg.arc().outerRadius(r);
+        // select paths, use arc generator to draw
+        var arcs = vis.selectAll("g.slice")
+            .data(pie)
+            .enter()
+            .append("g")
+            .attr("class", "slice");
+            
+        arcs.append("path")
+            .attr("fill", function(d, i){ return color(i); })
+            .attr("d", function (d) { return arc(d); });
+        // add the text
+        arcs.append("text").attr("transform", function(d){
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle)/2;
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+            })
+            .attr("text-anchor", "end")
+            .text( function(d, i) {
+                return data[i].label;
+            });
+        container.on("click", spin);
+        function spin(d){
+            
+            container.on("click", null);
+            //all slices have been seen, all done
+            console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
+            if(oldpick.length == data.length){
+                console.log("done");
+                container.on("click", null);
+                return;
+            }
+            var  ps       = 360/data.length,
+                 pieslice = Math.round(1440/data.length),
+                 rng      = Math.floor((Math.random() * 1440) + 360);
+                
+            rotation = (Math.round(rng / ps) * ps);
+            
+            picked = Math.round(data.length - (rotation % 360)/ps);
+            picked = picked >= data.length ? (picked % data.length) : picked;
+            if(oldpick.indexOf(picked) !== -1){
+                d3.select(this).call(spin);
+                return;
+            } else {
+                oldpick.push(picked);
+            }
+            rotation += 90 - Math.round(ps/2);
+            vis.transition()
+                .duration(3000)
+                .attrTween("transform", rotTween)
+                .each("end", function(){
+                
+                    container.on("click", spin);
+                });
+        }
+        //make arrow
+        svg.append("g")
+            .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h/2)+padding.top) + ")")
+            .append("path")
+            .attr("d", "M-" + (r*.15) + ",0L0," + (r*.05) + "L0,-" + (r*.05) + "Z")
+            .style({"fill":"black"});
+        //draw spin circle
+        container.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 60)
+            .style({"fill":"white","cursor":"pointer"});
+        //spin text
+        container.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .text("SPIN")
+            .style({"font-weight":"bold", "font-size":"30px"});
+        
+        
+        function rotTween(to) {
+          var i = d3.interpolate(oldrotation % 360, rotation);
+          return function(t) {
+            return "rotate(" + i(t) + ")";
+          };
+        }
+        
+        
+        function getRandomNumbers(){
+            var array = new Uint16Array(1000);
+            var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+            if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
+                window.crypto.getRandomValues(array);
+                console.log("works");
+            } else {
+                //no support for crypto, get crappy random numbers
+                for(var i=0; i < 1000; i++){
+                    array[i] = Math.floor(Math.random() * 100000) + 1;
+                }
+            }
+            return array;
+        }
+        var padding1 = {top:20, right:40, bottom:0, left:0},
+            w1 = 500 - padding1.left - padding1.right,
+            h1 = 500 - padding1.top  - padding1.bottom,
+            r1 = Math.min(w1, h1)/2,
+            rotation1 = 0,
+            oldrotation1 = 0,
+            picked1 = 100000,
+            oldpick1 = [],
+            color1 = d3.scale.category20();//category20c()
+            //randomNumbers = getRandomNumbers();
+        //http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
+        var data1 = [
+                    {"label":"Patriotic",  "value":1,  }, // padding
+                    {"label":"Emotional",  "value":1,  }, //font-family
+                    {"label":"Eulogy",  "value":1,  }, //color
+                    {"label":"Hate",  "value":1,  }, //font-weight
+                    {"label":"Emotionless",  "value":1,  }, //font-size
+                    {"label":"Nervous",  "value":1,  }, //background-color
+                    {"label":"ASMR",  "value":1,  }, //nesting
+                    {"label":"Sermon",  "value":1,  }, //bottom
+                    {"label":"Stand Up",  "value":1,  }, //sans-serif
+                    {"label":"A toast", "value":1, }, //period
+                    {"label":"Drill Sergeant", "value":1, }, //pound sign
+                    {"label":"Market Stall Owner", "value":1, }, //<body>
+                    {"label":"War time", "value":1, }, //<ul>
+                    {"label":"Drowning", "value":1, }, //<h1>
+                    {"label":"Novel", "value":1, }, //margin
+                    {"label":"Scary Story", "value":1, }, //< >
+                    {"label":"Love", "value":1, }, // { }
+                    {"label":"Poem", "value":1, }, //<p>
+                    {"label":"Horse Race Commentator", "value":1, }, //<!DOCTYPE html>
+        ];
+        var svg1 = d3.select('#chart1')
+            .append("svg")
+            .data([data1])
+            .attr("width",  w1 + padding1.left + padding1.right)
+            .attr("height", h1 + padding1.top + padding1.bottom);
+        var container1 = svg1.append("g")
+            .attr("class", "chartholder")
+            .attr("transform", "translate(" + (w1/2 + padding1.left) + "," + (h1/2 + padding1.top) + ")");
+        var vis1 = container1
+            .append("g");
+            
+        var pie1 = d3.layout.pie().sort(null).value(function(d){return 1;});
+        // declare an arc generator function
+        var arc1 = d3.svg.arc().outerRadius(r1);
+        // select paths, use arc generator to draw
+        var arcs1 = vis1.selectAll("g.slice")
+            .data(pie1)
+            .enter()
+            .append("g")
+            .attr("class", "slice");
+            
+        arcs1.append("path")
+            .attr("fill", function(d, i){ return color1(i); })
+            .attr("d", function (d) { return arc1(d); });
+        // add the text
+        arcs1.append("text").attr("transform", function(d){
+                d.innerRadius = 0;
+                d.outerRadius = r1;
+                d.angle = (d.startAngle + d.endAngle)/2;
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+            })
+            .attr("text-anchor", "end")
+            .text( function(d, i) {
+                return data1[i].label;
+            });
+        container1.on("click", spin1);
+        function spin1(d){
+            
+            container1.on("click", null);
+            //all slices have been seen, all done
+            console.log("OldPick: " + oldpick1.length, "Data length: " + data1.length);
+            if(oldpick1.length == data1.length){
+                console.log("done");
+                container1.on("click", null);
+                return;
+            }
+            var  ps1       = 360/data1.length,
+                 pieslice1 = Math.round(1440/data1.length),
+                 rng1      = Math.floor((Math.random() * 1440) + 360);
+                
+            rotation1 = (Math.round(rng1 / ps1) * ps1);
+            
+            picked1 = Math.round(data1.length - (rotation1 % 360)/ps1);
+            picked1 = picked1 >= data1.length ? (picked1 % data1.length) : picked1;
+            if(oldpick1.indexOf(picked1) !== -1){
+                d3.select(this).call(spin1);
+                return;
+            } else {
+                oldpick1.push(picked1);
+            }
+            rotation1 += 90 - Math.round(ps1/2);
+            vis1.transition()
+                .duration(3000)
+                .attrTween("transform", rotTween1)
+                .each("end", function(){
+                    container1.on("click", spin1);
+                });
+        }
+        //make arrow
+        svg1.append("g")
+            .attr("transform", "translate(" + (w1 + padding1.left + padding1.right) + "," + ((h1/2)+padding1.top) + ")")
+            .append("path")
+            .attr("d", "M-" + (r1*.15) + ",0L0," + (r1*.05) + "L0,-" + (r1*.05) + "Z")
+            .style({"fill":"black"});
+        //draw spin circle
+        container1.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 60)
+            .style({"fill":"white","cursor":"pointer"});
+        //spin text
+        container1.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .text("SPIN")
+            .style({"font-weight":"bold", "font-size":"30px"});
+        
+        
+        function rotTween1(to) {
+          var i1 = d3.interpolate(oldrotation1 % 360, rotation1);
+          return function(t1) {
+            return "rotate(" + i1(t1) + ")";
+          };
+        }
+        
+        
+        function getRandomNumbers1(){
+            var array1 = new Uint16Array(1000);
+            var scal1e = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+            if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues1 === "function"){
+                window.crypto.getRandomValues1(array1);
+                console.log("works");
+            } else {
+                //no support for crypto, get crappy random numbers
+                for(var i=0; i < 1000; i++){
+                    array1[i] = Math.floor(Math.random() * 100000) + 1;
+                }
+            }
+            return array;
+        }
+    var padding2 = {top:20, right:40, bottom:0, left:0},
+            w2 = 500 - padding2.left - padding2.right,
+            h2 = 500 - padding2.top  - padding2.bottom,
+            r2 = Math.min(w2, h2)/2,
+            rotation2 = 0,
+            oldrotation2 = 0,
+            picked2 = 200000,
+            oldpick2 = [],
+            color2 = d3.scale.category20();//category20c()
+            //randomNumbers = getRandomNumbers();
+        //http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
+        var data2 = [
+                    {"label":"Cockney",  "value":1,  }, // padding
+                    {"label":"Australian",  "value":1,  }, //font-family
+                    {"label":"South African",  "value":1,  }, //color
+                    {"label":"Scottish",  "value":1,  }, //font-weight
+                    {"label":"Welsh",  "value":1,  }, //font-size
+                    {"label":"Deep South",  "value":1,  }, //background-color
+                    {"label":"Northern",  "value":1,  }, //nesting
+                    {"label":"Southern",  "value":1,  }, //bottom
+                    {"label":"Somerset",  "value":1,  }, //sans-serif
+                    {"label":"Essex", "value":1, }, //period
+                    {"label":"Geordie", "value":1, }, //pound sign
+                    {"label":"Irish", "value":1, }, //<body>
+                    {"label":"French", "value":1, }, //<ul>
+                    {"label":"Scouse", "value":1, }, //<h1>
+                    {"label":"Roadman", "value":1, }, //margin
+        ];
+        var svg2 = d3.select('#chart2')
+            .append("svg")
+            .data([data2])
+            .attr("width",  w2 + padding2.left + padding2.right)
+            .attr("height", h2 + padding2.top + padding2.bottom);
+        var container2 = svg2.append("g")
+            .attr("class", "chartholder")
+            .attr("transform", "translate(" + (w2/2 + padding2.left) + "," + (h2/2 + padding2.top) + ")");
+        var vis2 = container2
+            .append("g");
+            
+        var pie2 = d3.layout.pie().sort(null).value(function(d){return 2;});
+        // declare an arc generator function
+        var arc2 = d3.svg.arc().outerRadius(r2);
+        // select paths, use arc generator to draw
+        var arcs2 = vis2.selectAll("g.slice")
+            .data(pie2)
+            .enter()
+            .append("g")
+            .attr("class", "slice");
+            
+        arcs2.append("path")
+            .attr("fill", function(d, i){ return color2(i); })
+            .attr("d", function (d) { return arc2(d); });
+        // add the text
+        arcs2.append("text").attr("transform", function(d){
+                d.innerRadius = 0;
+                d.outerRadius = r2;
+                d.angle = (d.startAngle + d.endAngle)/2;
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+            })
+            .attr("text-anchor", "end")
+            .text( function(d, i) {
+                return data2[i].label;
+            });
+        container2.on("click", spin2);
+        function spin2(d){
+            
+            container2.on("click", null);
+            //all slices have been seen, all done
+            console.log("OldPick: " + oldpick2.length, "Data length: " + data2.length);
+            if(oldpick2.length == data2.length){
+                console.log("done");
+                container2.on("click", null);
+                return;
+            }
+            var  ps2       = 360/data2.length,
+                 pieslice2 = Math.round(1440/data2.length),
+                 rng2      = Math.floor((Math.random() * 1440) + 360);
+                
+            rotation2 = (Math.round(rng2 / ps2) * ps2);
+            
+            picked2 = Math.round(data2.length - (rotation2 % 360)/ps2);
+            picked2 = picked2 >= data2.length ? (picked2 % data2.length) : picked2;
+            if(oldpick2.indexOf(picked2) !== -1){
+                d3.select(this).call(spin2);
+                return;
+            } else {
+                oldpick2.push(picked2);
+            }
+            rotation2 += 90 - Math.round(ps2/2);
+            vis2.transition()
+                .duration(3000)
+                .attrTween("transform", rotTween2)
+                .each("end", function(){
+                    container2.on("click", spin2);
+                });
+        }
+        //make arrow
+        svg2.append("g")
+            .attr("transform", "translate(" + (w2 + padding2.left + padding2.right) + "," + ((h2/2)+padding2.top) + ")")
+            .append("path")
+            .attr("d", "M-" + (r2*.15) + ",0L0," + (r2*.05) + "L0,-" + (r2*.05) + "Z")
+            .style({"fill":"black"});
+        //draw spin circle
+        container2.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 60)
+            .style({"fill":"white","cursor":"pointer"});
+        //spin text
+        container2.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .text("SPIN")
+            .style({"font-weight":"bold", "font-size":"30px"});
+        
+        
+        function rotTween2(to) {
+          var i2 = d3.interpolate(oldrotation2 % 360, rotation2);
+          return function(t2) {
+            return "rotate(" + i2(t2) + ")";
+          };
+        }
+        
+        
+        function getRandomNumbers2(){
+            var array2 = new Uint16Array(1000);
+            var scal2e = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+            if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues2 === "function"){
+                window.crypto.getRandomValues2(array2);
+                console.log("works");
+            } else {
+                //no support for crypto, get crappy random numbers
+                for(var i=0; i < 1000; i++){
+                    array2[i] = Math.floor(Math.random() * 100000) + 1;
+                }
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>

@@ -89,70 +89,70 @@ var cards = [
 
 shuffleArray(cards);
 
-  var state = 0;
-  var totalImages = cards.length;
-  var remaining = cards.length - 1;
-  var counter = 0;
-  var ended = false;
+var state = 0;
+var totalImages = cards.length;
+var remaining = cards.length - 1;
+var counter = 0;
+var ended = false;
 
-  console.log(totalImages)
+console.log(totalImages)
 
-  function displayImage(){
-    if (ended == true){
-        return;
-    } else {
-    document.getElementById("imageidback").src= cards[counter];
-    counter++;
-    console.log(counter)
-    if (counter === totalImages){
-        document.getElementById("imageidback").src= 'images/finish.jpg';
-        ended = true;
-        return;
-        }
-    }
-    };
-
-  function flip(){
-    if (ended == true) {
+function displayImage(){
+  if (ended == true){
       return;
-    };
-    var element = event.currentTarget;
-    if (element.className === "card") {
-      if(element.style.transform == "rotateY(-180deg)") {
-        element.style.transform = "rotateY(0deg)";
+  } else {
+  document.getElementById("imageidback").src= cards[counter];
+  counter++;
+  console.log(counter)
+  if (counter === totalImages){
+      document.getElementById("imageidback").src= 'images/finish.jpg';
+      ended = true;
+      return;
+      }
+  }
+  };
+
+function flip(){
+  if (ended == true) {
+    return;
+  };
+  var element = event.currentTarget;
+  if (element.className === "card") {
+    if(element.style.transform == "rotateY(-180deg)") {
+      element.style.transform = "rotateY(0deg)";
+    }
+    else {
+      element.style.transform = "rotateY(-180deg)";
+    }
+  }
+};
+
+function nextFlip(){
+    if (state == 0) {
+      displayImage();
+      remaining--;
+      if (remaining < 1) {
+        document.getElementById('remaining').innerHTML = 'Cards remaining: 0';
       }
       else {
-        element.style.transform = "rotateY(-180deg)";
+        document.getElementById('remaining').innerHTML = 'Cards remaining: ' + remaining;
       }
+      state = 1;
+      flip();
+      return;
     }
-  };
 
-  function nextFlip(){
-      if (state == 0) {
-        displayImage();
-        remaining--;
-        if (remaining < 1) {
-          document.getElementById('remaining').innerHTML = 'Cards remaining: 0';
-        }
-        else {
-          document.getElementById('remaining').innerHTML = 'Cards remaining:' + remaining;
-        }
-        state = 1;
-        flip();
-        return;
+    if (state == 1) {
+      state = 0;
+      flip();
+      if (remaining < 1) {
+        document.getElementById("imageidfront").src= 'images/finish.jpg';
+        ended = true;
       }
-
-      if (state == 1) {
-        state = 0;
-        flip();
-        if (remaining < 1) {
-          document.getElementById("imageidfront").src= 'images/finish.jpg';
-          ended = true;
-        }
-        return;
-    }
-  };
-  function remainder() {
-    document.getElementById('remaining').innerHTML = 'Cards remaining:' + remaining;
-  };
-  window.onload = displayImage();
+      return;
+  }
+};
+function remainder() {
+  document.getElementById('remaining').innerHTML = 'Cards remaining: ' + remaining;
+};
+window.onload = displayImage();

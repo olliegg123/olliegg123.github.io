@@ -30,7 +30,7 @@ var cards = [
   'images/29.png',
   'images/30.png',
   'images/31.png',
-  'images/32.png',
+  'images/32_1.png',
   'images/33.png',
   'images/34.png',
   'images/35.png',

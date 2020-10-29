@@ -110,6 +110,73 @@ var cards = [
   'images/109.png',
   'images/110.png',
   'images/111.png',
+  'images/112.png',
+  'images/113.png',
+  'images/114.png',
+  'images/115.png',
+  'images/116.png',
+  'images/117.png',
+  'images/118.png',
+  'images/119.png',
+  'images/120.png',
+  'images/121.png',
+  'images/122.png',
+  'images/123.png',
+  'images/124.png',
+  'images/125.png',
+  'images/126.png',
+  'images/127.png',
+  'images/128.png',
+  'images/129.png',
+  'images/130.png',
+  'images/131.png',
+  'images/132.png',
+  'images/133.png',
+  'images/134.png',
+  'images/135.png',
+  'images/136.png',
+  'images/137.png',
+  'images/138.png',
+  'images/139.png',
+  'images/140.png',
+  'images/141.png',
+  'images/142.png',
+  'images/143.png',
+  'images/144.png',
+  'images/145.png',
+  'images/146.png',
+  'images/147.png',
+  'images/148.png',
+  'images/149.png',
+  'images/150.png',
+  'images/151.png',
+];
+
+var lies = [
+  'I once killed a pigeon by accidentally standing on it',
+  'I can juggle',
+  'I went to school with somebody who is now an actor',
+  'I have 12 first cousins',
+  'I have written off a car',
+  'I am colourblind',
+  'I once got so drunk at a wedding that I stole the microphone0',
+  'Do something true',
+  'Do something true',
+  'Do something true',
+  'Do something true',
+  'Do something true',
+];
+
+var secret_tasks = [
+  'pretend to be upset in 2 rounds, everyone who believes you has to do 3 drinks',
+  'storm out in 4 cards, everyone who believes you has to do 3 drinks',
+  'act really offended at the next thing said to you, everyone who believes you has to do 3 drinks',
+  'suddenly get A LOT drunker until somebody notices, everyone who believes you has to do 3 drinks',
+  'nothing, you are safe',
+  'fall over the next time you go to the bathroom, everyone who believes you has to do 3 drinks',
+  'pretend to chunder in the bathroom within the next 15 minutes, everyone who believes you has to do 3 drinks',
+  'express some controversial views in 3 turns, everyone who believes you has to do 3 drinks',
+  'nothing, you are safe',
 ];
 
   function shuffleArray(array) {
@@ -122,6 +189,8 @@ var cards = [
 }
 
 shuffleArray(cards);
+shuffleArray(lies);
+shuffleArray(secret_tasks);
 
 var state = 0;
 var totalImages = cards.length;
@@ -130,12 +199,25 @@ var counter = 0;
 var ended = false;
 
 console.log(totalImages)
+console.log('1')
 
 function displayImage(){
+  document.getElementById("hiddencontainer").style.display = "none"; 
   if (ended == true){
       return;
   } else {
   document.getElementById("imageidback").src= cards[counter];
+  console.log(cards[counter]);
+  if (cards[counter] == 'images/140.png'){
+    console.log('@olliegg');
+    document.getElementById('hiddencontainer').innerHTML = lies[0];
+    document.getElementById("hiddencontainer").style.display = "inline-block"; 
+  };
+  if (cards[counter] == 'images/141.png'){
+    console.log('@olliegg');
+    document.getElementById('hiddencontainer').innerHTML = secret_tasks[0];
+    document.getElementById("hiddencontainer").style.display = "inline-block"; 
+  };
   counter++;
   console.log(counter)
   if (counter === totalImages){
